@@ -30,6 +30,3 @@ jobs:
         
     - name: Build with Maven
       run: mvn clean install --batch-mode --no-transfer-progress
-      
-    - name: Run tests
-      run: mvn test --batch-mode --no-transfer-progress
