@@ -1,18 +1,17 @@
 package ch.heigvd.pdl.refactoring;
 
+import java.util.List;
+
 public class OrdersWriter {
+    private final List<Order> orders;
 
-    private Orders orders;
-
-    public OrdersWriter(Orders orders) {
+    public OrdersWriter(List<Order> orders) {
         this.orders = orders;
     }
 
     public String getContents() {
         StringBuffer sb = new StringBuffer("{\"orders\": [");
-
-        for (int i = 0; i < orders.getOrdersCount(); i++) {
-            Order order = orders.getOrder(i);
+        for (var order : orders) {
             sb.append("{");
             sb.append("\"id\": ");
             sb.append(order.getOrderId());
@@ -51,7 +50,7 @@ public class OrdersWriter {
             sb.append("}, ");
         }
 
-        if (orders.getOrdersCount() > 0) {
+        if (orders.size() > 0) {
             sb.delete(sb.length() - 2, sb.length());
         }
 
