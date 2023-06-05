@@ -1,16 +1,13 @@
 package ch.heigvd.pdl.refactoring;
 
 public class Product {
-
-    public static final int SIZE_NOT_APPLICABLE = -1;
-
     private String code;
     private int color;
-    private int size;
+    private ClothSize size;
     private double price;
     private String currency;
 
-    public Product(String code, int color, int size, double price, String currency) {
+    public Product(String code, int color, ClothSize size, double price, String currency) {
         this.code = code;
         this.color = color;
         this.size = size;
@@ -26,7 +23,7 @@ public class Product {
         return color;
     }
 
-    public int getSize() {
+    public ClothSize getSize() {
         return size;
     }
 
