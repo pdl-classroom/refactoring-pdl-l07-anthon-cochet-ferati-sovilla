@@ -1,5 +1,6 @@
 package ch.heigvd.pdl.refactoring;
 
+import java.awt.*;
 import java.util.List;
 
 public class OrdersWriter {
@@ -25,7 +26,7 @@ public class OrdersWriter {
                 sb.append(product.getCode());
                 sb.append("\", ");
                 sb.append("\"color\": \"");
-                sb.append(getColorFor(product));
+                sb.append(product.getColor());
                 sb.append("\", ");
 
                 if (product.getSize() != ClothSize.NA) {
@@ -55,18 +56,5 @@ public class OrdersWriter {
         }
 
         return sb.append("]}").toString();
-    }
-
-    private String getColorFor(Product product) {
-        switch (product.getColor()) {
-            case 1:
-                return "blue";
-            case 2:
-                return "red";
-            case 3:
-                return "yellow";
-            default:
-                return "no color";
-        }
     }
 }
