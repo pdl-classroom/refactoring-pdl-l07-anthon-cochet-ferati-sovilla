@@ -18,21 +18,7 @@ public class OrdersWriter {
             sb.append("\"products\": [");
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
-                sb.append("{");
-                writeStringProperty("code", product.getCode());
-                sb.append(", ");
-                writeStringProperty("color", product.getColor());
-                sb.append(", ");
-
-                if (product.getSize() != ClothSize.NA) {
-                    writeStringProperty("size", product.getSize());
-                    sb.append(", ");
-                }
-
-                writeNumberProperty("price", product.getPrice());
-                sb.append(", ");
-                writeStringProperty("currency", product.getCurrency());
-                sb.append("}, ");
+                writeProduct(product);
             }
 
             if (order.getProductsCount() > 0) {
@@ -48,6 +34,24 @@ public class OrdersWriter {
         }
 
         return sb.append("]}").toString();
+    }
+
+    private void writeProduct(Product product) {
+        sb.append("{");
+        writeStringProperty("code", product.getCode());
+        sb.append(", ");
+        writeStringProperty("color", product.getColor());
+        sb.append(", ");
+
+        if (product.getSize() != ClothSize.NA) {
+            writeStringProperty("size", product.getSize());
+            sb.append(", ");
+        }
+
+        writeNumberProperty("price", product.getPrice());
+        sb.append(", ");
+        writeStringProperty("currency", product.getCurrency());
+        sb.append("}, ");
     }
 
     private StringBuilder writeKey(String key) {
