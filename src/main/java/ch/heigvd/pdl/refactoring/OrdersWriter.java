@@ -1,46 +1,38 @@
 package ch.heigvd.pdl.refactoring;
 
-import java.awt.*;
 import java.util.List;
 
 public class OrdersWriter {
     private final List<Order> orders;
+    private final StringBuilder sb = new StringBuilder("{\"orders\": [");
 
     public OrdersWriter(List<Order> orders) {
         this.orders = orders;
     }
 
     public String getContents() {
-        StringBuffer sb = new StringBuffer("{\"orders\": [");
         for (var order : orders) {
             sb.append("{");
-            sb.append("\"id\": ");
-            sb.append(order.getOrderId());
+            writeNumberProperty("id", order.getOrderId());
             sb.append(", ");
             sb.append("\"products\": [");
             for (int j = 0; j < order.getProductsCount(); j++) {
                 Product product = order.getProduct(j);
-
                 sb.append("{");
-                sb.append("\"code\": \"");
-                sb.append(product.getCode());
-                sb.append("\", ");
-                sb.append("\"color\": \"");
-                sb.append(product.getColor());
-                sb.append("\", ");
+                writeStringProperty("code", product.getCode());
+                sb.append(", ");
+                writeStringProperty("color", product.getColor());
+                sb.append(", ");
 
                 if (product.getSize() != ClothSize.NA) {
-                    sb.append("\"size\": \"");
-                    sb.append(product.getSize());
-                    sb.append("\", ");
+                    writeStringProperty("size", product.getSize());
+                    sb.append(", ");
                 }
 
-                sb.append("\"price\": ");
-                sb.append(product.getPrice());
+                writeNumberProperty("price", product.getPrice());
                 sb.append(", ");
-                sb.append("\"currency\": \"");
-                sb.append(product.getCurrency());
-                sb.append("\"}, ");
+                writeStringProperty("currency", product.getCurrency());
+                sb.append("}, ");
             }
 
             if (order.getProductsCount() > 0) {
@@ -57,4 +49,18 @@ public class OrdersWriter {
 
         return sb.append("]}").toString();
     }
+
+    private StringBuilder writeKey(String key) {
+        sb.append("\"").append(key).append("\"").append(": ");
+        return sb;
+    }
+
+    private void writeStringProperty(String key, Object value) {
+        writeKey(key).append("\"").append(value).append("\"");
+    }
+
+    private void writeNumberProperty(String key, Object number) {
+        writeKey(key).append(number);
+    }
+
 }
