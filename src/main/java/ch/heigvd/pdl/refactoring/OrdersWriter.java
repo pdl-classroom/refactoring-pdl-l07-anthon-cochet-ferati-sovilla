@@ -28,7 +28,6 @@ public class OrdersWriter {
     private void writeOrder(Order order) {
         sb.append("{");
         writeProperty("id", order.getOrderId());
-        sb.append(", ");
         sb.append("\"products\": [");
         for (int j = 0; j < order.getProductsCount(); j++) {
             Product product = order.getProduct(j);
@@ -46,33 +45,37 @@ public class OrdersWriter {
     private void writeProduct(Product product) {
         sb.append("{");
         writeQuotedProperty("code", product.getCode());
-        sb.append(", ");
         writeQuotedProperty("color", product.getColor());
-        sb.append(", ");
-
         if (product.getSize() != ClothSize.NA) {
             writeQuotedProperty("size", product.getSize());
-            sb.append(", ");
         }
-
         writeProperty("price", product.getPrice());
-        sb.append(", ");
         writeQuotedProperty("currency", product.getCurrency());
+        removeTrailingComa();
         sb.append("}");
     }
 
+    private void writeQuotedTerm(Object value) {
+        sb.append('"').append(value).append('"');
+    }
 
-    private StringBuilder writeKey(String key) {
-        sb.append("\"").append(key).append("\"").append(": ");
-        return sb;
+    private void writeProperty(String key, Object value, boolean quotedValue) {
+        writeQuotedTerm(key);
+        sb.append(": ");
+        if (quotedValue) {
+            writeQuotedTerm(value);
+        } else {
+            sb.append(value);
+        }
+        sb.append(", ");
     }
 
     private void writeQuotedProperty(String key, Object value) {
-        writeKey(key).append("\"").append(value).append("\"");
+        writeProperty(key, value, true);
     }
 
-    private void writeProperty(String key, Object number) {
-        writeKey(key).append(number);
+    private void writeProperty(String key, Object value) {
+        writeProperty(key, value, false);
     }
 
     private void removeTrailingComa() {
