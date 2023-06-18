@@ -1,6 +1,8 @@
 package ch.heigvd.pdl.refactoring;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class OrdersWriter {
     private final List<Order> orders;
@@ -12,33 +14,17 @@ public class OrdersWriter {
     }
 
     public String getContents() {
-        sb.append("{\"orders\": [");
-        for (var order : orders) {
-            writeOrder(order);
-            sb.append(", ");
-        }
-
-        if (orders.size() > 0) {
-            removeTrailingComa();
-        }
-
-        return sb.append("]}").toString();
+        sb.append("{");
+        writePropertyCollection("orders", orders, this::writeOrder);
+        sb.append("}");
+        return sb.toString();
     }
 
     private void writeOrder(Order order) {
         sb.append("{");
         writeProperty("id", order.getOrderId());
-        sb.append("\"products\": [");
-        for (Product p : order.getProducts()) {
-            writeProduct(p);
-            sb.append(", ");
-        }
-
-        if (order.getProducts().size() > 0) {
-            removeTrailingComa();
-        }
-
-        sb.append("]}");
+        writePropertyCollection("products", order.getProducts(), this::writeProduct);
+        sb.append("}");
     }
 
     private void writeProduct(Product product) {
@@ -54,13 +40,29 @@ public class OrdersWriter {
         sb.append("}");
     }
 
+    private <T> void writePropertyCollection(String key, Collection<T> collections, Consumer<T> writer) {
+        writeKey(key);
+        sb.append('[');
+        for (var item : collections) {
+            writer.accept(item);
+            sb.append(", ");
+        }
+        if (!collections.isEmpty()) {
+            removeTrailingComa();
+        }
+        sb.append(']');
+    }
     private void writeQuotedTerm(Object value) {
         sb.append('"').append(value).append('"');
     }
 
-    private void writeProperty(String key, Object value, boolean quotedValue) {
+    private void writeKey(String key) {
         writeQuotedTerm(key);
         sb.append(": ");
+    }
+
+    private void writeProperty(String key, Object value, boolean quotedValue) {
+        writeKey(key);
         if (quotedValue) {
             writeQuotedTerm(value);
         } else {
