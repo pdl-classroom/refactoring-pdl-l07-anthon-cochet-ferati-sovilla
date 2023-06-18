@@ -29,13 +29,12 @@ public class OrdersWriter {
         sb.append("{");
         writeProperty("id", order.getOrderId());
         sb.append("\"products\": [");
-        for (int j = 0; j < order.getProductsCount(); j++) {
-            Product product = order.getProduct(j);
-            writeProduct(product);
+        for (Product p : order.getProducts()) {
+            writeProduct(p);
             sb.append(", ");
         }
 
-        if (order.getProductsCount() > 0) {
+        if (order.getProducts().size() > 0) {
             removeTrailingComa();
         }
 

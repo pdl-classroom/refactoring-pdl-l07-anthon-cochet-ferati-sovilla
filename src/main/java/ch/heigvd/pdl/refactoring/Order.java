@@ -1,11 +1,13 @@
 package ch.heigvd.pdl.refactoring;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Order {
-    private List<Product> products = new ArrayList<>();
-    private int id;
+    private final List<Product> products = new ArrayList<>();
+    private final int id;
 
     public Order(int id) {
         this.id = id;
@@ -14,16 +16,11 @@ public class Order {
     public int getOrderId() {
         return id;
     }
-
-    public int getProductsCount() {
-        return products.size();
+    public Collection<Product> getProducts() {
+        return Collections.unmodifiableCollection(products);
     }
 
-    public Product getProduct(int j) {
-        return products.get(j);
-    }
-
-    public void AddProduct(Product product) {
+    public void addProduct(Product product) {
         products.add(product);
     }
 }
