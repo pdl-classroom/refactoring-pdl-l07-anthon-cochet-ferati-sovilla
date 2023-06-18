@@ -14,23 +14,24 @@ public class OrdersWriter {
     }
 
     public String getContents() {
-        sb.append("{");
+        beginObject();
         writePropertyCollection("orders", orders, this::writeOrder);
-        sb.append("}");
+        endObject();
+
         String result = sb.toString();
         sb = new StringBuilder();
         return result;
     }
 
     private void writeOrder(Order order) {
-        sb.append("{");
+        beginObject();
         writeProperty("id", order.getOrderId());
         writePropertyCollection("products", order.getProducts(), this::writeProduct);
-        sb.append("}");
+        endObject();
     }
 
     private void writeProduct(Product product) {
-        sb.append("{");
+        beginObject();
         writeQuotedProperty("code", product.getCode());
         writeQuotedProperty("color", product.getColor());
         if (product.getSize() != ClothSize.NA) {
@@ -39,7 +40,7 @@ public class OrdersWriter {
         writeProperty("price", product.getPrice());
         writeQuotedProperty("currency", product.getCurrency());
         removeTrailingComa();
-        sb.append("}");
+        endObject();
     }
 
     private <T> void writePropertyCollection(String key, Collection<T> collections, Consumer<T> writer) {
@@ -83,6 +84,14 @@ public class OrdersWriter {
 
     private void removeTrailingComa() {
         sb.delete(sb.length() - 2, sb.length());
+    }
+
+    private void beginObject() {
+        sb.append("{");
+    }
+
+    private void endObject() {
+        sb.append("}");
     }
 
 }
