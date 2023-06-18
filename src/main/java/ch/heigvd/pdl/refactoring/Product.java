@@ -1,7 +1,5 @@
 package ch.heigvd.pdl.refactoring;
 
-import java.io.Serializable;
-
 public class Product implements JsonSerializable {
     private String code;
     private ProductColor color;
