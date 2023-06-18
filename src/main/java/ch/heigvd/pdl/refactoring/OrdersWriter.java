@@ -27,7 +27,7 @@ public class OrdersWriter {
 
     private void writeOrder(Order order) {
         sb.append("{");
-        writeNumberProperty("id", order.getOrderId());
+        writeProperty("id", order.getOrderId());
         sb.append(", ");
         sb.append("\"products\": [");
         for (int j = 0; j < order.getProductsCount(); j++) {
@@ -45,32 +45,33 @@ public class OrdersWriter {
 
     private void writeProduct(Product product) {
         sb.append("{");
-        writeStringProperty("code", product.getCode());
+        writeQuotedProperty("code", product.getCode());
         sb.append(", ");
-        writeStringProperty("color", product.getColor());
+        writeQuotedProperty("color", product.getColor());
         sb.append(", ");
 
         if (product.getSize() != ClothSize.NA) {
-            writeStringProperty("size", product.getSize());
+            writeQuotedProperty("size", product.getSize());
             sb.append(", ");
         }
 
-        writeNumberProperty("price", product.getPrice());
+        writeProperty("price", product.getPrice());
         sb.append(", ");
-        writeStringProperty("currency", product.getCurrency());
+        writeQuotedProperty("currency", product.getCurrency());
         sb.append("}");
     }
+
 
     private StringBuilder writeKey(String key) {
         sb.append("\"").append(key).append("\"").append(": ");
         return sb;
     }
 
-    private void writeStringProperty(String key, Object value) {
+    private void writeQuotedProperty(String key, Object value) {
         writeKey(key).append("\"").append(value).append("\"");
     }
 
-    private void writeNumberProperty(String key, Object number) {
+    private void writeProperty(String key, Object number) {
         writeKey(key).append(number);
     }
 
