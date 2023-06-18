@@ -19,7 +19,7 @@ public class OrdersWriter {
         }
 
         if (orders.size() > 0) {
-            sb.delete(sb.length() - 2, sb.length());
+            removeTrailingComa();
         }
 
         return sb.append("]}").toString();
@@ -37,7 +37,7 @@ public class OrdersWriter {
         }
 
         if (order.getProductsCount() > 0) {
-            sb.delete(sb.length() - 2, sb.length());
+            removeTrailingComa();
         }
 
         sb.append("]}");
@@ -73,6 +73,10 @@ public class OrdersWriter {
 
     private void writeProperty(String key, Object number) {
         writeKey(key).append(number);
+    }
+
+    private void removeTrailingComa() {
+        sb.delete(sb.length() - 2, sb.length());
     }
 
 }
