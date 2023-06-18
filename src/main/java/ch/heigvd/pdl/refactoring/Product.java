@@ -1,6 +1,8 @@
 package ch.heigvd.pdl.refactoring;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements JsonSerializable {
     private String code;
     private ProductColor color;
     private ClothSize size;
@@ -15,23 +17,17 @@ public class Product {
         this.currency = currency;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public ProductColor getColor() {
-        return color;
-    }
-
-    public ClothSize getSize() {
-        return size;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getCurrency() {
-        return currency;
+    @Override
+    public void serialize(JsonSerializer serializer) {
+        serializer.beginObject();
+        serializer.writeQuotedProperty("code", code);
+        serializer.writeQuotedProperty("color", color);
+        if (size != ClothSize.NA) {
+            serializer.writeQuotedProperty("size", size);
+        }
+        serializer.writeProperty("price", price);
+        serializer.writeQuotedProperty("currency", currency);
+        serializer.removeTrailingComa();
+        serializer.endObject();
     }
 }

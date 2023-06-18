@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class Order {
+public class Order implements JsonSerializable {
     private final List<Product> products = new ArrayList<>();
     private final int id;
 
@@ -13,14 +13,15 @@ public class Order {
         this.id = id;
     }
 
-    public int getOrderId() {
-        return id;
-    }
-    public Collection<Product> getProducts() {
-        return Collections.unmodifiableCollection(products);
-    }
-
     public void addProduct(Product product) {
         products.add(product);
+    }
+
+    @Override
+    public void serialize(JsonSerializer serializer) {
+        serializer.beginObject();
+        serializer.writeProperty("id", id);
+        serializer.writePropertyCollection("products", products);
+        serializer.endObject();
     }
 }
