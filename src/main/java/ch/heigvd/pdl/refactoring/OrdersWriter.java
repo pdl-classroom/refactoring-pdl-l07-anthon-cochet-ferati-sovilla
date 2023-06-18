@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 public class OrdersWriter {
     private final List<Order> orders;
-    private final StringBuilder sb = new StringBuilder();
+    private StringBuilder sb = new StringBuilder();
 
     public OrdersWriter(List<Order> orders) {
         this.orders = orders;
@@ -17,7 +17,9 @@ public class OrdersWriter {
         sb.append("{");
         writePropertyCollection("orders", orders, this::writeOrder);
         sb.append("}");
-        return sb.toString();
+        String result = sb.toString();
+        sb = new StringBuilder();
+        return result;
     }
 
     private void writeOrder(Order order) {
